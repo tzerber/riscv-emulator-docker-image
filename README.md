@@ -43,10 +43,10 @@ ssh root@localhost -p 2222
 
 ```bash
 # 2. Alternative: Allocate more CPU / RAM to QEMU guest
-# Start the container, and manually start QEMU with the required specs.
-# replace AAAA with desired cpus (e.g. 2 or 4)
-# replace BBBB with desired RAM (e.g. 2G or 4G)
-docker run -d --publish 127.0.0.1:2222:2222/tcp davidburela/riscv-emulator qemu-system-riscv64 -smp AAAA -m BBBB -cpu rv64 -nographic -machine virt -kernel /usr/lib/u-boot/qemu-riscv64_smode/uboot.elf -device virtio-blk-device,drive=hd -drive file=dqib_riscv64-virt/image.qcow2,if=none,id=hd -device virtio-net-device,netdev=net -netdev user,id=net,hostfwd=tcp::2222-:22 -object rng-random,filename=/dev/urandom,id=rng -device virtio-rng-device,rng=rng -append "root=LABEL=rootfs console=ttyS0"
+# Amount of memory and CPU count are available as docker variables. 
+# QM_CPU=X where X is the number of CPUs to be added. 
+# QM_RAM=Y where Y is the amount of memory, i.e. 4G means 4 gigabytes of RAM.
+docker run -d --publish 127.0.0.1:2222:2222/tcp -e QM_CPU=4 -e QM_RAM=4G davidburela/riscv-emulator
 ```
 
 ### Podman
